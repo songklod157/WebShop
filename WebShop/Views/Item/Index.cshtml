@@ -1,0 +1,111 @@
+﻿@model WebShop.ViewModel.ItemViewModel
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Add Item</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                Category :
+                @Html.DropDownListFor(expression: model => model.CategotyId ,new SelectList(Model.CategorySelectListItem, dataValueField:"Value",dataTextField: "Text"),
+                htmlAttributes: new { @class = "form-control"})
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                Item Code :
+                @Html.TextBoxFor(expression: model => model.ItemCode, htmlAttributes: new { @class = "form-control", autocomplete = "Off" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                Item Name :
+                @Html.TextBoxFor(expression: model => model.Name, htmlAttributes: new { @class = "form-control", autocomplete = "Off" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                Description :
+                @Html.TextBoxFor(expression: model => model.Description, htmlAttributes: new { @class = "form-control", autocomplete = "Off" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                Price :
+                @Html.TextBoxFor(expression: model => model.Price, htmlAttributes: new { @class = "form-control", autocomplete = "Off" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                Image :
+                @Html.TextBoxFor(expression: model => model.Image, htmlAttributes: new { type = "file", @class = "form-contro"})
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <input type="button" value="Save" name="save" class="btn btn-primary" id="btnSave" />
+                &nbsp;
+                <input type="button" value="Reset" name="reset" class="btn btn-danger" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnSave").click(function () {
+            SaveItem();
+
+        });
+    });
+
+    function ResetItem() {
+        $("#CategoryId").val("1");
+        $("#ItemCode").val("");
+        $("#Name").val("");
+        $("#Description").val("");
+        $("#Price").val("");
+        $("#Image").val("");
+    }
+
+    function SaveItem() {
+        var formData = new FormData();
+        formData.append("CategoryId", $("#CategoryId").val());
+        formData.append("ItemCode", $("#ItemCode").val());
+        formData.append("Name", $("#Name").val());
+        formData.append("Description", $("#Description").val());
+        formData.append("Price", $("#Price").val());
+        formData.append("Image", $("#Image").get(0).files[0]);
+
+
+        $.ajax({
+            async: true,
+            dataType: 'JSON',
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            url: '/Item/Index',
+            data: formData,
+            success: function (data) {
+                if (data.Success)
+                {
+
+                    alert(data.Message);
+                    ResetItem();
+                }
+            },
+            error: function ()
+            {
+                alert("fixe");
+            }
+
+        });
+    }
+
+</script>
